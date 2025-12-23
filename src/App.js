@@ -1,23 +1,52 @@
-import logo from './logo.svg';
-import './App.css';
+import { useState } from "react";
+import axios from "axios";
 
 function App() {
+  const [subject, setSubject] = useState("");
+  const [body, setBody] = useState("");
+  const [recipients, setRecipients] = useState("");
+  const [message, setMessage] = useState("");
+
+  const sendMail = async () => {
+    try {
+      await axios.post("http://localhost:5000/api/mail/send", {
+        subject,
+        body,
+        recipients: recipients.split(","),
+      });
+      setMessage("Email sent successfully ✅");
+    } catch {
+      setMessage("Failed to send email ❌");
+    }
+  };
+
   return (
-    <div className="App">
-      <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
-        <p>
-          Edit <code>src/App.js</code> and save to reload.
-        </p>
-        <a
-          className="App-link"
-          href="https://reactjs.org"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Learn React
-        </a>
-      </header>
+    <div style={{ padding: 20 }}>
+      <h2>Bulk Mail Sender</h2>
+
+      <input
+        placeholder="Subject"
+        value={subject}
+        onChange={(e) => setSubject(e.target.value)}
+      />
+      <br /><br />
+
+      <textarea
+        placeholder="Email Body"
+        value={body}
+        onChange={(e) => setBody(e.target.value)}
+      />
+      <br /><br />
+
+      <input
+        placeholder="Recipients (comma separated)"
+        value={recipients}
+        onChange={(e) => setRecipients(e.target.value)}
+      />
+      <br /><br />
+
+      <button onClick={sendMail}>Send Mail</button>
+      <p>{message}</p>
     </div>
   );
 }
