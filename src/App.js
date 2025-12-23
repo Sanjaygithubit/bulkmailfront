@@ -9,7 +9,7 @@ function App() {
 
   const sendMail = async () => {
     try {
-      await axios.post("http://localhost:5000/api/mail/send", {
+      await axios.post("https://bulkmailback.onrender.com/api/mail/send", {
         subject,
         body,
         recipients: recipients.split(","),
